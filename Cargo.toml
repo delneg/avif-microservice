@@ -1,0 +1,16 @@
+[package]
+name = "avif-microservice"
+version = "0.1.0"
+edition = "2018"
+
+# See more keys and their definitions at https://doc.rust-lang.org/cargo/reference/manifest.html
+
+[dependencies]
+warp = "0.3.1"
+
+tokio = {version = "1",features=["full"]}
+bytes = "1.0.1"
+futures = "0.3.16"
+#ravif = "0.8.4"
+imgref = "1.9.1"
+jpeg-decoder = "0.1.22"
