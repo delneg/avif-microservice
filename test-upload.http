@@ -1,0 +1,9 @@
+POST http://localhost:3030/upload HTTP/1.1
+Content-Type: multipart/form-data; boundary=boundary
+
+--boundary
+Content-Disposition: form-data; name="file"; filename="testimg.png"
+Content-Type: image/png
+
+< ./testimg.png
+--boundary

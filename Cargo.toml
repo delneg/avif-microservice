@@ -8,9 +8,9 @@ edition = "2018"
 [dependencies]
 warp = "0.3.1"
 
-tokio = {version = "1",features=["full"]}
+tokio = { version = "1", features = ["full"] }
 bytes = "1.0.1"
 futures = "0.3.16"
-#ravif = "0.8.4"
+ravif = "0.8.4"
 imgref = "1.9.1"
 jpeg-decoder = "0.1.22"
