@@ -1,3 +1,14 @@
+POST http://localhost:3030/upload
+Content-Type: multipart/form-data; boundary=WebAppBoundary
+
+--WebAppBoundary
+Content-Disposition: form-data; name="file"; filename="testmg2.jpg"
+Content-Type: image/jpeg
+
+< ./testimg2.jpg
+--WebAppBoundary--
+
+###
 POST http://localhost:3030/upload HTTP/1.1
 Content-Type: multipart/form-data; boundary=boundary
 
@@ -7,3 +18,4 @@ Content-Type: image/png
 
 < ./testimg.png
 --boundary
+
