@@ -1,4 +1,4 @@
-#  .08Avif-microservice
+#  Avif-microservice
 
 This project is a simple POC to wrap AVIF conversion into a web api using wrap.
 
