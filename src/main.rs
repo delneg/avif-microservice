@@ -92,7 +92,7 @@ async fn upload(form: FormData) -> Result<impl Reply, Rejection> {
 
 
             let premultiplied_alpha = false;
-            let mut img = load_rgba(value.as_slice(), premultiplied_alpha)
+            let img = load_rgba(value.as_slice(), premultiplied_alpha)
                 .map_err(|e| {
                     eprintln!("Loading image error {}", e);
                     warp::reject::reject()
