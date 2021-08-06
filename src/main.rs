@@ -11,6 +11,7 @@ use ravif::{RGBA8, Config, ColorSpace};
 use warp::reply::Response;
 use warp::reply::html;
 use askama::Template;
+use std::time::Instant;
 
 
 type BoxError = Box<dyn std::error::Error + Send + Sync>;
@@ -49,6 +50,7 @@ fn load_rgba(mut data: &[u8], premultiplied_alpha: bool) -> Result<ImgVec<RGBA8>
 }
 
 async fn upload(form: FormData) -> Result<impl Reply, Rejection> {
+    let now = Instant::now();
     let parts: Vec<Part> = form.try_collect().await.map_err(|e| {
         eprintln!("form error: {}", e);
         warp::reject::reject()
@@ -107,9 +109,8 @@ async fn upload(form: FormData) -> Result<impl Reply, Rejection> {
                 eprintln!("Encoding error {}", e);
                 warp::reject::reject()
             })?;
-            println!("Success: {}KB ({}B color, {}B alpha, {}B HEIF)", (out_data.len()+999)/1000, color_size, alpha_size, out_data.len() - color_size - alpha_size);
-
-
+            let elapsed = now.elapsed();
+            println!("Success [{:.2?}]: {}KB ({}B color, {}B alpha, {}B HEIF)", elapsed, (out_data.len() + 999) / 1000, color_size, alpha_size, out_data.len() - color_size - alpha_size);
             return Ok(out_data);
 
         }
