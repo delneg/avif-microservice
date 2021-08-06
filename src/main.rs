@@ -9,6 +9,9 @@ use imgref::ImgVec;
 use std::convert::Infallible;
 use ravif::{RGBA8, Config, ColorSpace};
 use warp::reply::Response;
+use warp::reply::html;
+use askama::Template;
+
 
 type BoxError = Box<dyn std::error::Error + Send + Sync>;
 
@@ -132,6 +135,26 @@ async fn handle_rejection(err: Rejection) -> std::result::Result<impl Reply, Inf
     Ok(warp::reply::with_status(message, code))
 }
 
+
+#[derive(Template)]
+#[template(path = "index.html")]
+struct IndexTemplate<'a> {
+    address: &'a str,
+}
+
+async fn index_handler() -> Result<impl Reply, Rejection> {
+    let template = IndexTemplate {
+        address: "http://127.0.0.1:3030/upload",
+    };
+    let res = template
+        .render()
+        .map_err(|e| {
+            println!("Template error {}",e);
+            warp::reject::reject()
+        })?;
+    Ok(html(res))
+}
+
 #[tokio::main]
 async fn main() {
 
@@ -140,14 +163,20 @@ async fn main() {
     // 2. Encode using default params +
     // 3. Return image +
     // 4. Implement params from URL
-    // 5. Test from html
+    // 5. Test from html +
     let upload_route = warp::path("upload")
         .and(warp::post())
         .and(warp::multipart::form().max_length(5_000_000))
         .and_then(upload);
+
     let download_route = warp::path("files").and(warp::fs::dir("./files/"));
 
-    let router = upload_route.or(download_route).recover(handle_rejection);
+    let index_route = warp::get().and(warp::path::end()).and_then(index_handler);
+    let router =
+        upload_route
+        .or(download_route)
+        .or(index_route)
+        .recover(handle_rejection);
 
 
     println!("Server started at http://127.0.0.1:3030");
